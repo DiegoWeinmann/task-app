@@ -12,6 +12,6 @@
     "baseUrl": "src",
     "traceResolution": false
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
   "include": ["./src/**/*"]
 }

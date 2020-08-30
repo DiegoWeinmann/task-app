@@ -1,7 +1,8 @@
 module.exports = {
   env: {
     es2020: true,
-    node: true
+    node: true,
+    "jest/globals": true
   },
   extends: [
     'standard',
@@ -15,7 +16,8 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'jest'
   ],
   rules: {
     'no-console': 1
