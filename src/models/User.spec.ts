@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import User from './User'
 import { wrapAsync } from '../utils/wrapAsync'
+import * as TestDB from '../utils/testUtils'
 
 const successCase = {
   name: 'test',
@@ -39,22 +40,16 @@ const failCaseWrongPassword = {
 
 describe('User Model', () => {
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_URL!, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true
-    })
+    await TestDB.connect()
   })
 
   beforeEach(async () => {
-    await User.deleteMany({})
+    await TestDB.clearDatabase()
   })
 
-  afterAll(() => {
-    mongoose.connection.db.dropDatabase()
-    mongoose.connection.close()
+  afterAll(async () => {
+    await TestDB.closeDatabase()
   })
-
   it('should create a user', async () => {
     const user = await User.create(successCase)
     expect(user.name).toBe(successCase.name)

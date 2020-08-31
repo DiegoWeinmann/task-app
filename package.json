@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
     "lint": "./node_modules/.bin/eslint './src/**' --fix",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test": "jest --runInBand",
+    "test:watch": "jest --runInBand --watchAll"
   },
   "dependencies": {
     "cors": "^2.8.5",
