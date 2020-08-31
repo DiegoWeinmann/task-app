@@ -9,6 +9,7 @@ const successCase = {
 }
 
 const failCaseNoDescription = {
+  description: '',
   completed: false
 }
 
