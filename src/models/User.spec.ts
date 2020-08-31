@@ -16,6 +16,13 @@ const failCaseAgeUserZero = {
   password: '1234'
 }
 
+const failCaseEmail = {
+  name: 'test',
+  age: 30,
+  email: 'testtestcom',
+  password: '1234567'
+}
+
 const failCaseShortPassword = {
   name: 'test',
   age: 30,
@@ -50,7 +57,6 @@ describe('User Model', () => {
 
   it('should create a user', async () => {
     const user = await User.create(successCase)
-
     expect(user.name).toBe(successCase.name)
     expect(user.age).toBe(successCase.age)
     expect(user.email).toBe(successCase.email)
@@ -60,15 +66,20 @@ describe('User Model', () => {
 
   it('should validate that the age must be a positive number', async () => {
     const { error } = await wrapAsync(User.create(failCaseAgeUserZero))
-
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.age).toBeDefined()
     expect(error.errors.age.message).toBe('Age must be a positive number.')
   })
 
-  it('should validate that a password has more than 6 characters long', async () => {
-    const { error } = await wrapAsync(User.create(failCaseShortPassword))
+  it('should validate that the email format is valid', async () => {
+    const { error } = await wrapAsync(User.create(failCaseEmail))
+    expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
+    expect(error.errors.email).toBeDefined()
+    expect(error.errors.email.message).toBe('Please provide a valid email.')
+  })
 
+  it('should validate that a password has more than 6 characters', async () => {
+    const { error } = await wrapAsync(User.create(failCaseShortPassword))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.password).toBeDefined()
     expect(error.errors.password.message).toBe(
@@ -78,7 +89,6 @@ describe('User Model', () => {
 
   it('should validate that the password doesnt contain the word "password"', async () => {
     const { error } = await wrapAsync(User.create(failCaseWrongPassword))
-
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.password).toBeDefined()
     expect(error.errors.password.message).toBe(
