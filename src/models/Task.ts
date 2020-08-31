@@ -1,4 +1,4 @@
-import mongoose, {Document} from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 
 const TaskSchema = new mongoose.Schema({
   description: {

@@ -14,7 +14,7 @@ const connect = async () => {
     useUnifiedTopology: true,
     useCreateIndex: true
   }
-  logger.info(`Mongodb test database: ${uri}`)
+  // logger.info(`Mongodb test database: ${uri}`)
   await mongoose.connect(uri, mongooseOpts)
 }
 
@@ -25,7 +25,7 @@ const closeDatabase = async () => {
   await mongoose.connection.dropDatabase()
   await mongoose.connection.close()
   await mongod.stop()
-  logger.info('mongodb closed')
+  // logger.info('mongodb closed')
 }
 
 /**

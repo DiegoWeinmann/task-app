@@ -1,9 +1,8 @@
-import express from 'express'
-import { logger } from './utils/logger'
+import app from './app'
 import './db/mongoose'
+import { logger } from './utils/logger'
 
-const app = express()
-const PORT = 3000 || process.env.PORT
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
   logger.info(`Server listening on port ${PORT}`)
