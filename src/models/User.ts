@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Document }  from 'mongoose'
 import validator from 'validator'
 
 const UserSchema = new mongoose.Schema({
@@ -36,4 +36,13 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
-export default mongoose.model('User', UserSchema)
+interface IUser {
+  name: string
+  age: number
+  email: string
+  password: string
+}
+
+interface IUserDocument extends Document, IUser {}
+
+export default mongoose.model<IUserDocument>('User', UserSchema)

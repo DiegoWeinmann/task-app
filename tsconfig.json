@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "traceResolution": false
   },
   "exclude": ["node_modules", "**/*.spec.ts"],
