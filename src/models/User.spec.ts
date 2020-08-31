@@ -9,6 +9,13 @@ const successCase = {
   password: '1234567'
 }
 
+const failCaseAgeUserZero = {
+  name: 'test',
+  age: -30,
+  email: 'test@test.com',
+  password: '1234'
+}
+
 const failCaseShortPassword = {
   name: 'test',
   age: 30,
@@ -49,6 +56,14 @@ describe('User Model', () => {
     expect(user.email).toBe(successCase.email)
     expect(user.password).toBe(successCase.password)
     expect(user).toHaveProperty('_id')
+  })
+
+  it('should validate that the age must be a positive number', async () => {
+    const { error } = await wrapAsync(User.create(failCaseAgeUserZero))
+
+    expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
+    expect(error.errors.age).toBeDefined()
+    expect(error.errors.age.message).toBe('Age must be a positive number.')
   })
 
   it('should validate that a password has more than 6 characters long', async () => {
