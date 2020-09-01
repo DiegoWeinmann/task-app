@@ -40,8 +40,20 @@ app.get('/users/:id', async (req, res) => {
 })
 
 app.patch('/users/:id', async (req, res) => {
+  const updates = Object.keys(req.body)
+  const allowedUpdates = ['name', 'email', 'password', 'age']
+  const isValid = updates.every(update => allowedUpdates.includes(update))
+
+  if (!isValid) {
+    res.status(400)
+    return handleError(res)(new Error('Attemped to update an invalid field'))
+  }
+
   const [user, error] = await wrapAsync(
-    User.findByIdAndUpdate(req.params.id, req.body).exec()
+    User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    }).exec()
   )
   if (error) return handleError(res)(error)
   if (!user) {
@@ -71,6 +83,30 @@ app.get('/tasks/:id', async (req, res) => {
     return handleError(res)(new Error('task not found'))
   }
   return res.status(200).send(task)
+})
+
+app.patch('/tasks/:id', async (req, res) => {
+  const updates = Object.keys(req.body)
+  const allowedUpdates = ['completed']
+  const isValid = updates.every(update => allowedUpdates.includes(update))
+
+  if (!isValid) {
+    res.status(400)
+    return handleError(res)(new Error('Attemped to update an invalid field'))
+  }
+
+  const [user, error] = await wrapAsync(
+    Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    }).exec()
+  )
+  if (error) return handleError(res)(error)
+  if (!user) {
+    res.status(404)
+    return handleError(res)(new Error('task not found'))
+  }
+  return res.status(200).send(user)
 })
 
 export default app
