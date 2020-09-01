@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import User from './User'
+import User, { IUserDocument } from './User'
 import { wrapAsync } from '../utils/wrapAsync'
 import * as TestDB from '../utils/testUtils'
 
@@ -60,21 +60,30 @@ describe('User Model', () => {
   })
 
   it('should validate that the age must be a positive number', async () => {
-    const [, , error] = await wrapAsync(User.create(failCaseAgeUserZero))
+    const [, error] = await wrapAsync<
+      IUserDocument,
+      mongoose.Error.ValidationError
+    >(User.create(failCaseAgeUserZero))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.age).toBeDefined()
     expect(error.errors.age.message).toBe('Age must be a positive number.')
   })
 
   it('should validate that the email format is valid', async () => {
-    const [, , error] = await wrapAsync(User.create(failCaseEmail))
+    const [, error] = await wrapAsync<
+      IUserDocument,
+      mongoose.Error.ValidationError
+    >(User.create(failCaseEmail))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.email).toBeDefined()
     expect(error.errors.email.message).toBe('Please provide a valid email.')
   })
 
   it('should validate that a password has more than 6 characters', async () => {
-    const [, , error] = await wrapAsync(User.create(failCaseShortPassword))
+    const [, error] = await wrapAsync<
+      IUserDocument,
+      mongoose.Error.ValidationError
+    >(User.create(failCaseShortPassword))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.password).toBeDefined()
     expect(error.errors.password.message).toBe(
@@ -83,7 +92,10 @@ describe('User Model', () => {
   })
 
   it('should validate that the password doesnt contain the word "password"', async () => {
-    const [, , error] = await wrapAsync(User.create(failCaseWrongPassword))
+    const [, error] = await wrapAsync<
+      IUserDocument,
+      mongoose.Error.ValidationError
+    >(User.create(failCaseWrongPassword))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.password).toBeDefined()
     expect(error.errors.password.message).toBe(

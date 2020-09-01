@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Task from './Task'
+import Task, { ITaskDocument } from './Task'
 import { wrapAsync } from '../utils/wrapAsync'
 import * as TestDB from '../utils/testUtils'
 
@@ -31,16 +31,19 @@ describe('Task Model', () => {
   })
 
   it('should create a Task', async () => {
-    const [, result] = await wrapAsync(Task.create(successCase))
+    const [task] = await wrapAsync<ITaskDocument>(Task.create(successCase))
 
-    expect(result).toBeDefined()
-    expect(result?.description).toBe(successCase.description)
-    expect(result?.completed).toBe(successCase.completed)
-    expect(result).toHaveProperty('_id')
+    expect(task).toBeDefined()
+    expect(task.description).toBe(successCase.description)
+    expect(task.completed).toBe(successCase.completed)
+    expect(task).toHaveProperty('_id')
   })
 
   it('should validate that the description field is required', async () => {
-    const [, , error] = await wrapAsync(Task.create(failCaseNoDescription))
+    const [, error] = await wrapAsync<
+      ITaskDocument,
+      mongoose.Error.ValidationError
+    >(Task.create(failCaseNoDescription))
     expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
     expect(error.errors.description).toBeDefined()
     expect(error.errors.description.message).toBe(
@@ -48,8 +51,8 @@ describe('Task Model', () => {
     )
   })
   it('should validate that completed field is optional and has a default value of false', async () => {
-    const [, result] = await wrapAsync(Task.create(successCompletedFalse))
-    expect(result).toBeDefined()
-    expect(result?.completed).toBe(false)
+    const [task] = await wrapAsync(Task.create(successCompletedFalse))
+    expect(task).toBeDefined()
+    expect(task.completed).toBe(false)
   })
 })
