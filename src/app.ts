@@ -8,6 +8,7 @@ import { wrapAsync } from './utils/wrapAsync'
 const app = express()
 
 const handleError = (res: Response) => (error: Error) => {
+  logger.error(error.message || 'Internal server error')
   return res
     .status(res.statusCode || 500)
     .send(error.message || 'Internal server error')
