@@ -34,8 +34,8 @@ describe('Task Model', () => {
     const [task] = await wrapAsync<ITaskDocument>(Task.create(successCase))
 
     expect(task).toBeDefined()
-    expect(task.description).toBe(successCase.description)
-    expect(task.completed).toBe(successCase.completed)
+    expect(task?.description).toBe(successCase.description)
+    expect(task?.completed).toBe(successCase.completed)
     expect(task).toHaveProperty('_id')
   })
 
@@ -53,6 +53,6 @@ describe('Task Model', () => {
   it('should validate that completed field is optional and has a default value of false', async () => {
     const [task] = await wrapAsync(Task.create(successCompletedFalse))
     expect(task).toBeDefined()
-    expect(task.completed).toBe(false)
+    expect(task?.completed).toBe(false)
   })
 })

@@ -66,8 +66,9 @@ describe(usersEndpoint, () => {
   test(`GET ${usersEndpoint}/:id -> 404 Not Found`, async () => {
     const objectId = new ObjectID()
     const getResponse = await request(app).get(`${usersEndpoint}/${objectId}`)
-    expect(getResponse.body).toStrictEqual({})
     expect(getResponse.status).toBe(404)
+    expect(getResponse.body.success).toBe(false)
+    expect(getResponse.body.error).toBe('User not found')
   })
 })
 
@@ -119,7 +120,8 @@ describe(tasksEndpoint, () => {
   test(`GET ${tasksEndpoint}/:id -> 404 Not Found`, async () => {
     const objectId = new ObjectID()
     const getResponse = await request(app).get(`${tasksEndpoint}/${objectId}`)
-    expect(getResponse.body).toStrictEqual({})
     expect(getResponse.status).toBe(404)
+    expect(getResponse.body.success).toBe(false)
+    expect(getResponse.body.error).toBe('Task not found')
   })
 })
