@@ -1,27 +1,18 @@
-import express, { Response } from 'express'
+import express from 'express'
 import morgan from 'morgan'
-import { logger } from './utils/logger'
+import { handleError } from './utils/handleError'
 import User from './models/User'
 import Task from './models/Task'
 import { wrapAsync } from './utils/wrapAsync'
 
 const app = express()
 
-const handleError = (res: Response) => (error: Error) => {
-  logger.error(error.message || 'Internal server error')
-  return res
-    .status(res.statusCode || 500)
-    .send(error.message || 'Internal server error')
-}
-
 app.use(express.json())
 app.use(morgan('dev'))
 
 app.post('/users', async (req, res) => {
   const [success, user, error] = await wrapAsync(User.create(req.body))
-
   if (!success) return handleError(res)(error)
-
   return res.status(201).send(
     [user.toObject({ getters: true })].map(user => {
       delete user.password
