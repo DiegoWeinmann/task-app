@@ -16,7 +16,6 @@ app.post('/users', (req, res) => {
     .then(() => {
       return res.status(201).send(
         [user.toObject({ getters: true })].map(user => {
-          delete user._id
           delete user.password
           return user
         })[0]
@@ -25,6 +24,33 @@ app.post('/users', (req, res) => {
     .catch(err => {
       logger.error(err)
       return res.status(400).send(err)
+    })
+})
+
+app.get('/users', (_req, res) => {
+  User.find()
+    .then(users => {
+      res.send(users)
+    })
+    .catch(err => {
+      logger.error(err.message)
+      res.status(500).send()
+    })
+})
+
+app.get('/users/:id', (req, res) => {
+  const { id } = req.params
+  User.findById(id)
+    .select('-password')
+    .then(user => {
+      if (!user) {
+        return res.status(404).send()
+      }
+      res.status(200).send(user)
+    })
+    .catch(err => {
+      logger.error(err.message)
+      res.status(500).send()
     })
 })
 
