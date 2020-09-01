@@ -1,3 +1,4 @@
+import { ObjectID } from 'mongodb'
 import request from 'supertest'
 import app from './app'
 import * as TestDB from './utils/testUtils'
@@ -34,18 +35,25 @@ describe(usersEndpoint, () => {
     expect(response.body.password).not.toBeDefined()
   })
 
-  test(`GET ${usersEndpoint}`, async () => {
+  test(`GET ${usersEndpoint} -> 200`, async () => {
     const postResponse = await request(app).post(usersEndpoint).send(newUser)
     const getResponse = await request(app).get(usersEndpoint)
     expect(Array.isArray(getResponse.body)).toBeTruthy()
     expect(getResponse.body[0]._id).toBe(postResponse.body._id)
   })
 
-  test(`GET ${usersEndpoint}/:id`, async () => {
+  test(`GET ${usersEndpoint}/:id -> 200`, async () => {
     const postResponse = await request(app).post(usersEndpoint).send(newUser)
     const userId = postResponse.body._id
     const getResponse = await request(app).get(`${usersEndpoint}/${userId}`)
     expect(typeof getResponse.body).toBeDefined()
     expect(getResponse.body._id).toBe(userId)
+  })
+
+  test(`GET ${usersEndpoint}/:id -> 404`, async () => {
+    const objectId = new ObjectID()
+    const getResponse = await request(app).get(`${usersEndpoint}/${objectId}`)
+    expect(getResponse.body).toStrictEqual({})
+    expect(getResponse.status).toBe(404)
   })
 })

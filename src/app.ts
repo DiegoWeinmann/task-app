@@ -67,4 +67,15 @@ app.post('/tasks', (req, res) => {
     })
 })
 
+app.get('/tasks', (req, res) => {
+  Task.find()
+    .then(tasks => {
+      res.send(tasks)
+    })
+    .catch(err => {
+      logger.error(err.message)
+      res.status(500).send()
+    })
+})
+
 export default app
