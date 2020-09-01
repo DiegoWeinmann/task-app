@@ -36,13 +36,13 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
-interface IUser {
+export interface IUser {
   name: string
   age: number
   email: string
   password: string
 }
 
-interface IUserDocument extends Document, IUser {}
+export interface IUserDocument extends Document, IUser {}
 
 export default mongoose.model<IUserDocument>('User', UserSchema)

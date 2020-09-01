@@ -67,7 +67,7 @@ app.post('/tasks', (req, res) => {
     })
 })
 
-app.get('/tasks', (req, res) => {
+app.get('/tasks', (_req, res) => {
   Task.find()
     .then(tasks => {
       res.send(tasks)
@@ -78,4 +78,18 @@ app.get('/tasks', (req, res) => {
     })
 })
 
+app.get('/tasks/:id', (req, res) => {
+  const { id } = req.params
+  Task.findById(id)
+    .then(task => {
+      if (!task) {
+        return res.status(404).send()
+      }
+      res.send(task)
+    })
+    .catch(err => {
+      logger.error(err.message)
+      res.status(500).send()
+    })
+})
 export default app

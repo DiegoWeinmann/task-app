@@ -52,7 +52,10 @@
     }
   },
   "lint-staged": {
-    "*.ts": "eslint --cache --fix",
-    "*.{ts}": "prettier --write"
+    "*.ts": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
+    "*.spec.ts": "npm run test"
   }
 }

@@ -11,11 +11,11 @@ const TaskSchema = new mongoose.Schema({
   }
 })
 
-interface ITask {
+export interface ITask {
   description: string
   completed?: boolean
 }
 
-interface ITaskDocument extends ITask, Document {}
+export interface ITaskDocument extends ITask, Document {}
 
 export default mongoose.model<ITaskDocument>('Task', TaskSchema)
