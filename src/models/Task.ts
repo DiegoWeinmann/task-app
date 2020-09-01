@@ -13,7 +13,7 @@ const TaskSchema = new mongoose.Schema({
 
 interface ITask {
   description: string
-  completed: boolean
+  completed?: boolean
 }
 
 interface ITaskDocument extends ITask, Document {}

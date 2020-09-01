@@ -3,7 +3,6 @@ import app from './app'
 import * as TestDB from './utils/testUtils'
 
 const usersEndpoint = '/users'
-const tasksEndpoint = '/tasks'
 
 describe(usersEndpoint, () => {
   beforeAll(() => {
@@ -28,5 +27,10 @@ describe(usersEndpoint, () => {
 
     const response = await request(app).post(usersEndpoint).send(newUser)
     expect(response.status).toBe(201)
+    expect(response.body).toBeDefined()
+    expect(response.body.name).toBe(newUser.name)
+    expect(response.body.age).toBe(newUser.age)
+    expect(response.body.email).toBe(newUser.email)
+    expect(response.body.password).not.toBeDefined()
   })
 })

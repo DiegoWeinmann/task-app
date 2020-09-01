@@ -5,7 +5,6 @@ import User from './models/User'
 import Task from './models/Task'
 
 const app = express()
-const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(morgan('dev'))
