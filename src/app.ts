@@ -110,7 +110,7 @@ app.patch('/tasks/:id', async (req, res) => {
     return handleError(res)(new Error('Attemped to update an invalid field'))
   }
 
-  const [user, error] = await wrapAsync(
+  const [task, error] = await wrapAsync(
     Task.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
@@ -118,11 +118,11 @@ app.patch('/tasks/:id', async (req, res) => {
   )
   if (error) return handleError(res)(error)
 
-  if (!user) {
+  if (!task) {
     res.status(404)
     return handleError(res)(new Error('Task not found'))
   }
-  return res.status(200).send(user)
+  return res.status(200).send(task)
 })
 
 export default app
