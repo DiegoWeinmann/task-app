@@ -66,7 +66,7 @@ app.patch('/users/:id', async (req, res) => {
 
   if (!user) {
     res.status(404)
-    return handleError(res)(new Error('user not found'))
+    return handleError(res)(new Error('User not found'))
   }
 
   return res.status(200).send(user)
@@ -120,7 +120,7 @@ app.patch('/tasks/:id', async (req, res) => {
 
   if (!user) {
     res.status(404)
-    return handleError(res)(new Error('task not found'))
+    return handleError(res)(new Error('Task not found'))
   }
   return res.status(200).send(user)
 })
