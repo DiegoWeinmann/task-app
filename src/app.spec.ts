@@ -109,6 +109,26 @@ describe(usersEndpoint, () => {
     expect(patchResponse.body.success).toBe(false)
     expect(patchResponse.body.error).toBe('Attemped to update an invalid field')
   })
+
+  test(`DELETE ${usersEndpoint}/:id -> 200`, async () => {
+    const createdUser = await createUser(newUser)
+
+    const deleteResponse = await request(app).delete(
+      `${usersEndpoint}/${createdUser._id}`
+    )
+    expect(deleteResponse.status).toBe(200)
+  })
+
+  test(`DELETE ${usersEndpoint}/:id -> 404 Not found`, async () => {
+    const userId = new ObjectID()
+
+    const deleteResponse = await request(app).delete(
+      `${usersEndpoint}/${userId}`
+    )
+    expect(deleteResponse.status).toBe(404)
+    expect(deleteResponse.body.success).toBe(false)
+    expect(deleteResponse.body.error).toBe('User not found')
+  })
 })
 
 describe(tasksEndpoint, () => {
@@ -199,5 +219,25 @@ describe(tasksEndpoint, () => {
     expect(patchResponse.status).toBe(400)
     expect(patchResponse.body.success).toBe(false)
     expect(patchResponse.body.error).toBe('Attemped to update an invalid field')
+  })
+
+  test(`DELETE ${tasksEndpoint}/:id -> 200`, async () => {
+    const createdTask = await createTask(newTask)
+
+    const deleteResponse = await request(app).delete(
+      `${tasksEndpoint}/${createdTask._id}`
+    )
+    expect(deleteResponse.status).toBe(200)
+  })
+
+  test(`DELETE ${tasksEndpoint}/:id -> 404 Not found`, async () => {
+    const taskId = new ObjectID()
+
+    const deleteResponse = await request(app).delete(
+      `${tasksEndpoint}/${taskId}`
+    )
+    expect(deleteResponse.status).toBe(404)
+    expect(deleteResponse.body.success).toBe(false)
+    expect(deleteResponse.body.error).toBe('Task not found')
   })
 })
