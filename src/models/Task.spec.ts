@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
-import Task, { ITaskDocument } from './Task'
+import Task from './Task'
+import { ITaskDocument } from './types'
 import { wrapAsync } from '../utils/wrapAsync'
 import * as TestDB from '../utils/testUtils'
 

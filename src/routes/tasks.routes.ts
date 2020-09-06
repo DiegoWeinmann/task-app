@@ -42,19 +42,26 @@ router.patch('/:id', async (req, res) => {
     return handleError(res)(new Error('Attemped to update an invalid field'))
   }
 
-  const [task, error] = await wrapAsync(
-    Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    }).exec()
-  )
+  const [task, error] = await wrapAsync(Task.findById(req.params.id).exec())
   if (error) return handleError(res)(error)
 
   if (!task) {
     res.status(404)
     return handleError(res)(new Error('Task not found'))
   }
-  return res.status(200).send(task)
+
+  updates.forEach(update => {
+    task.set(update, req.body[update])
+  })
+
+  const [updatedTask, updateError] = await wrapAsync(task.save())
+
+  if (updateError) {
+    res.status(400)
+    return handleError(res)(updateError)
+  }
+
+  return res.status(200).send(updatedTask)
 })
 
 router.delete('/:id', async (req, res) => {

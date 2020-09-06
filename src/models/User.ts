@@ -1,5 +1,7 @@
-import mongoose, { Document }  from 'mongoose'
+import mongoose from 'mongoose'
 import validator from 'validator'
+import { IUserDocument } from './types.d'
+import bcrypt from 'bcryptjs'
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -36,13 +38,14 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
-export interface IUser {
-  name: string
-  age: number
-  email: string
-  password: string
-}
+UserSchema.pre<IUserDocument>('save', async function (next) {
+  const user = this
 
-export interface IUserDocument extends Document, IUser {}
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8)
+  }
+
+  return next()
+})
 
 export default mongoose.model<IUserDocument>('User', UserSchema)

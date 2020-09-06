@@ -1,4 +1,5 @@
 import mongoose, { Document } from 'mongoose'
+import { ITaskDocument } from './types'
 
 const TaskSchema = new mongoose.Schema({
   description: {
@@ -10,12 +11,5 @@ const TaskSchema = new mongoose.Schema({
     default: false
   }
 })
-
-export interface ITask {
-  description: string
-  completed?: boolean
-}
-
-export interface ITaskDocument extends ITask, Document {}
 
 export default mongoose.model<ITaskDocument>('Task', TaskSchema)

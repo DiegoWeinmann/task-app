@@ -1,0 +1,5 @@
+{
+  "exec": "node './dist/server.js'",
+  "verbose": false,
+  "quiet": true
+}

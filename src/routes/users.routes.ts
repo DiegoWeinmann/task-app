@@ -50,12 +50,7 @@ router.patch('/:id', async (req, res) => {
     return handleError(res)(new Error('Attemped to update an invalid field'))
   }
 
-  const [user, error] = await wrapAsync(
-    User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    }).exec()
-  )
+  const [user, error] = await wrapAsync(User.findById(req.params.id).exec())
 
   if (error) return handleError(res)(error)
 
@@ -64,7 +59,18 @@ router.patch('/:id', async (req, res) => {
     return handleError(res)(new Error('User not found'))
   }
 
-  return res.status(200).send(user)
+  updates.forEach(update => {
+    user.set(update, req.body[update])
+  })
+
+  const [updatedUser, updateError] = await wrapAsync(user.save())
+
+  if (updateError) {
+    res.status(400)
+    return handleError(res)(updateError)
+  }
+
+  return res.status(200).send(updatedUser)
 })
 
 router.delete('/:id', async (req, res) => {

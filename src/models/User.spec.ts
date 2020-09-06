@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
-import User, { IUserDocument } from './User'
+import User from './User'
+import { IUserDocument } from './types'
 import { wrapAsync } from '../utils/wrapAsync'
 import * as TestDB from '../utils/testUtils'
 
@@ -55,7 +56,6 @@ describe('User Model', () => {
     expect(user.name).toBe(successCase.name)
     expect(user.age).toBe(successCase.age)
     expect(user.email).toBe(successCase.email)
-    expect(user.password).toBe(successCase.password)
     expect(user).toHaveProperty('_id')
   })
 
